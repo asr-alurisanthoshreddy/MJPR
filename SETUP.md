@@ -1,7 +1,5 @@
 # HSSAN Flower Classification — Setup Guide
 
-## Setup Guide
-
 This project uses **HSSAN (Hybrid Spectral-Spatial Attention Network)** for flower image classification with computer vision.
 
 ## Requirements
@@ -61,6 +59,6 @@ npm run start
 
 ## Project Summary
 
-- **Project Name:** Use CNNs to classify flowers based on their features like color and shape using computer vision
+- **Project Description:** Use CNNs to classify flowers based on their features like color and shape using computer vision
 - **Model Name:** HSSAN
 - **Task:** Flower image classification using computer vision
