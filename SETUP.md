@@ -1,8 +1,8 @@
-# Use CNNs to classify flowers based on their features like color and shape using computer vision
+# HSSAN Flower Classification — Setup Guide
 
 ## Setup Guide
 
-This project uses the **HSSAN** model for flower image classification.
+This project uses **HSSAN (Hybrid Spectral-Spatial Attention Network)** for flower image classification with computer vision.
 
 ## Requirements
 
