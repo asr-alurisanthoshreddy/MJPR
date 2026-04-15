@@ -59,6 +59,6 @@ npm run start
 
 ## Project Summary
 
-- **Project Description:** Use CNNs to classify flowers based on their features like color and shape using computer vision
-- **Model Name:** HSSAN
-- **Task:** Flower image classification using computer vision
+- **Project Description:** Use CNNs to classify flowers from color and shape cues in images.
+- **Model Name:** HSSAN (Hybrid Spectral-Spatial Attention Network)
+- **Task:** Multi-class flower image classification with a spectral-spatial attention-based CNN approach.
