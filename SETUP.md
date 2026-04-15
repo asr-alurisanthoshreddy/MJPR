@@ -1,6 +1,6 @@
-# MJPR / HSSAN — Setup Guide
+# Use CNNs to classify flowers based on their features like color and shape using computer vision — Setup Guide
 
-This repository contains a full-stack TypeScript app for flower classification with HSSAN-themed UI.
+This repository contains a full-stack TypeScript app for flower classification. The model name used in this project is HSSAN.
 
 ## Tech Stack
 
