@@ -1,203 +1,135 @@
-# HSSAN — Setup Guide
+# MJPR / HSSAN — Setup Guide
 
-**Hybrid Spectral-Spatial Attention Network** — AI-powered flower classification app.
+This repository contains a full-stack TypeScript app for flower classification with HSSAN-themed UI.
 
----
+## Tech Stack
 
-## Requirements
-
-Before you start, make sure you have these installed on your machine:
-
-| Tool | Version | Download |
-|------|---------|----------|
-| Node.js | 20 or higher | https://nodejs.org |
-| npm | comes with Node.js | — |
-| Git (optional) | any | https://git-scm.com |
-
-You also need one free API key:
-
-| Key | Where to get it |
-|-----|----------------|
-| `GEMINI_API_KEY` | https://aistudio.google.com/app/apikey → click **Create API key** |
+- **Frontend:** React + Vite + Tailwind
+- **Backend:** Express (Node.js)
+- **API:** `POST /api/predict` for image analysis
+- **Runtime behavior:**
+  - If `GEMINI_API_KEY` is set, the server calls Gemini (`gemini-2.5-flash`)
+  - If `GEMINI_API_KEY` is missing or the API fails, the app returns a deterministic local fallback analysis
 
 ---
 
-## Step 1 — Get the Project
+## Prerequisites
 
-Download the zip from Replit and extract it, or clone it if you have Git:
+- Node.js **20+**
+- npm (comes with Node.js)
+
+Check versions:
 
 ```bash
-# If you downloaded a zip, just extract it and open the folder
-# If you have Git:
-git clone <your-repo-url>
-cd <project-folder>
+node -v
+npm -v
 ```
 
 ---
 
-## Step 2 — Open in VS Code
+## 1) Install dependencies
 
-```bash
-code .
-```
-
-Or open VS Code manually and use **File → Open Folder** to select the project folder.
-
----
-
-## Step 3 — Set Up Your API Key
-
-1. In the project root, find the file `.env.example`
-2. Make a copy of it and rename the copy to `.env`
-3. Open `.env` and replace the placeholder value with your real key:
-
-```env
-GEMINI_API_KEY=AIzaSy_your_real_key_here
-```
-
-> The `.env` file is private — never share it or commit it to Git.
-
----
-
-## Step 4 — Install Dependencies
-
-Open the **VS Code Terminal** (`Ctrl + `` ` `` ` on Windows/Linux, `Cmd + `` ` `` ` on Mac) and run:
+From the project root:
 
 ```bash
 npm install
 ```
 
-This installs all packages. It may take a minute the first time.
+---
+
+## 2) Configure environment (optional but recommended)
+
+Create a `.env` file in the project root if you want live Gemini analysis:
+
+```env
+GEMINI_API_KEY=your_key_here
+```
+
+> Without this key, the app still works using local fallback results.
 
 ---
 
-## Step 5 — Run the Project
+## 3) Run in development
 
 ```bash
 npm run dev
 ```
 
-You should see:
+The app and API are served from:
 
-```
-[express] serving on port 5000
-```
+- `http://localhost:5000`
 
-Now open your browser and go to:
+Pages:
 
-```
-http://localhost:5000
-```
-
-The app is running. Upload a flower image and it will classify it.
+- `/` — upload and analyze flower images
+- `/architecture` — architecture visualization
 
 ---
 
-## How It Works
+## 4) Build and run production
 
-```
-Upload Image
-     │
-     ▼
- Gemini API (gemini-1.5-flash)
-     │
-     ▼
-Species name + Confidence score
-+ Phytochemical compounds
-+ Geographic distribution
-     │
-     ▼
-Results shown inline on the page
+Build:
+
+```bash
+npm run build
 ```
 
-- **Gemini 1.5 Flash** analyzes the image and returns all information in one call
-- No database is used — results are shown inline and not stored anywhere
+Start production server:
 
----
-
-## Project Structure
-
-```
-HSSAN/
-├── client/                  # React frontend (Vite)
-│   └── src/
-│       ├── pages/
-│       │   └── Home.tsx     # Main page with upload + results
-│       ├── components/
-│       │   ├── Navbar.tsx
-│       │   └── UploadZone.tsx
-│       └── hooks/
-│           └── use-predictions.ts
-├── server/                  # Express backend
-│   ├── index.ts             # Server entry point (loads .env)
-│   └── routes.ts            # POST /api/predict — Gemini analysis
-├── shared/
-│   ├── schema.ts            # TypeScript types
-│   └── routes.ts            # API contract
-├── .env.example             # Template — copy to .env and fill in your key
-├── SETUP.md                 # This file
-└── package.json
+```bash
+npm run start
 ```
 
 ---
 
-## Available Scripts
+## Available scripts
 
-| Command | What it does |
-|---------|-------------|
-| `npm run dev` | Start development server (hot reload) |
-| `npm run build` | Build for production |
-| `npm run start` | Run the production build |
-| `npm run check` | TypeScript type check |
+- `npm run dev` — start dev server
+- `npm run build` — build client+server
+- `npm run start` — run built app
+- `npm run check` — TypeScript type check
+- `npm run db:push` — push Drizzle schema
+
+---
+
+## Current project structure (high level)
+
+```text
+MJPR/
+├── client/            # React UI (home + architecture pages)
+├── server/            # Express server and API routes
+├── shared/            # Shared schemas and route contracts
+├── script/build.ts    # Build pipeline
+├── package.json       # Scripts and dependencies
+└── SETUP.md           # This guide
+```
 
 ---
 
 ## Troubleshooting
 
-**"Failed to analyze image" or API error**
-- The error message now shows the exact reason — read it carefully in the red notification
-- Most common cause: `.env` file missing, wrong location, or key pasted incorrectly
-- Make sure your `.env` file is in the **root of the project** (same folder as `package.json`)
-- Make sure the key has no extra spaces or quotes — correct format:
-  ```
-  GEMINI_API_KEY=AIzaSyABCDEFGH...
-  ```
-  Not:
-  ```
-  GEMINI_API_KEY = "AIzaSyABCDEFGH..."
-  ```
-- Verify your key is active at [aistudio.google.com](https://aistudio.google.com/app/apikey)
+### Port 5000 already in use
 
-**`NODE_ENV` error on Windows when running `npm run dev`**
-- Windows does not support `NODE_ENV=development` in scripts without a helper
-- Run the server directly instead:
-  ```bash
-  npx cross-env NODE_ENV=development tsx server/index.ts
-  ```
-  Or set the variable manually in PowerShell then run tsx:
-  ```powershell
-  $env:NODE_ENV="development"; npx tsx server/index.ts
-  ```
+Run with a different port:
 
-**Port already in use**
-- Something else is using port 5000. You can change the port:
-  ```bash
-  PORT=3000 npm run dev
-  ```
+```bash
+PORT=3000 npm run dev
+```
 
-**npm install fails**
-- Make sure you are using Node.js 20 or higher: `node --version`
-- Delete `node_modules` and `package-lock.json` and try again:
-  ```bash
-  rm -rf node_modules package-lock.json
-  npm install
-  ```
+### `npm install` fails
 
----
+- Ensure Node.js 20+
+- Remove `node_modules` and reinstall:
 
-## Recommended VS Code Extensions
+```bash
+rm -rf node_modules package-lock.json
+npm install
+```
 
-- **ESLint** — code linting
-- **Prettier** — auto formatting
-- **Tailwind CSS IntelliSense** — autocomplete for Tailwind classes
-- **TypeScript Error Lens** — inline TypeScript errors
+### Windows and `NODE_ENV=development` script format
+
+If `npm run dev` fails in Windows shells, run:
+
+```bash
+npx cross-env NODE_ENV=development tsx server/index.ts
+```
