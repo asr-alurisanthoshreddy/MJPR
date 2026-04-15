@@ -38,7 +38,3 @@ This repository is intended to support:
 - Hyperparameter tuning for better accuracy
 - Model optimization for faster inference
 - Deployment as a web or mobile prediction service
-
-## License
-
-Add your preferred license information here.
